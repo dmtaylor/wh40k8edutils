@@ -1,0 +1,14 @@
+This project is for simulating dice rolls in 8th edition of Warhammer
+40,000. The goal of this is to have a way to do statistical analysis
+of units to determine how effective/viable they are. As a Necron player,
+expect to features helping analyze Necron units (e.g. tesla rules) before
+others. 
+
+The directory structure is:
+
+README
+LICENSE
+src/
+	wh40kutils	# the main module for the backbone of rolling
+	test		# directories for tests as needed
+	sample		# Misc code making use of this module.
