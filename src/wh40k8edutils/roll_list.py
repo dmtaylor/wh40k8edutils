@@ -19,6 +19,8 @@ class RollList:
         '''
         Constructor
         '''
+        if num_rolls <= 0:
+            raise ValueError('Invalid roll number', num_rolls)
         self.num_rolls = num_rolls
         self.passvalue = passvalue
         self.reroll_values = reroll_values
