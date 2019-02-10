@@ -19,7 +19,7 @@ class DieRoll:
         Instance variables:
             isd3: is a roll of a d3 rather than the typical d6
             orig_value: unmodified value of roll
-            rerolled_value: value after any rerolls
+            rerolled_value: value after any rerolls, for tracking
             mod_value: value after all modifiers taken into account
             rerolled: Has this die been re-rolled? A die can only be rerolled
                     once.

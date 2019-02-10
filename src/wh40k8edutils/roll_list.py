@@ -10,8 +10,18 @@ from typing import List
 from wh40k8edutils.dieroll import DieRoll
 
 class RollList:
-    '''
-    classdocs
+    ''' Primitive for a batch of die rolls with same stats
+        This class represents a batch of die rolls, with the same pass value
+        and modifiers (e.g. the to hit roll for a unit).
+        
+        Instance variables:
+            num_rolls = Number of rolls in the batch
+            passvalue = Number >= the requirement for a pass
+            reroll_values = List of values to do re-rolls for.
+            mod = Integer modifier to rolls. Applied after rerolls
+            onealwaysfails = Will a roll of a one always fail regardless of
+                             modifiers (e.g. armor checks)
+            rolls = list of DieRoll objects
     '''
 
 
