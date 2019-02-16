@@ -8,6 +8,7 @@ A list of rolls representing a batch of rolls
 import random
 from typing import List
 from wh40k8edutils.dieroll import DieRoll
+from builtins import True
 
 class RollList:
     ''' Primitive for a batch of die rolls with same stats
@@ -27,7 +28,7 @@ class RollList:
 
     def __init__(self, num_rolls: int, passvalue: int,
                  reroll_values: List[int] = None, mod: int = 0,
-                 onealwaysfails: bool = False ):
+                 onealwaysfails: bool = False, isd3: bool = False ):
         '''
         Constructor
         '''
@@ -44,7 +45,10 @@ class RollList:
         random.seed()
         self.rolls = []
         for _ in range(self.num_rolls):
-            self.rolls.append(DieRoll())
+            if isd3:
+                self.rolls.append(DieRoll(isd3=True))
+            else:
+                self.rolls.append(DieRoll())
             
         self.do_rerolls()
         self.apply_mod()
