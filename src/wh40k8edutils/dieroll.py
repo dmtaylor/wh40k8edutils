@@ -46,7 +46,7 @@ class DieRoll:
         self.rerolled_value = random.choice(self.d6_values)
         self.mod_value = self.rerolled_value
         self.rerolled = True
-        
+
     def apply_mod(self, modifier: int):
         self.mod_value += modifier
         
@@ -55,3 +55,7 @@ class DieRoll:
             return True
         else:
             return False
+        
+    def __repr__(self):
+        return "<DieRoll isd3:%s orig_value:%d rerolled_value:%d mod_value:%d rerolled:%s"\
+             % (self.isd3, self.orig_value, self.rerolled_value, self.mod_value, self.rerolled)

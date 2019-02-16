@@ -8,7 +8,6 @@ A list of rolls representing a batch of rolls
 import random
 from typing import List
 from wh40k8edutils.dieroll import DieRoll
-from builtins import True
 
 class RollList:
     ''' Primitive for a batch of die rolls with same stats
