@@ -1,7 +1,7 @@
 '''
 Created on Feb 15, 2019
 
-@author: David
+@author: David Taylor
 '''
 import unittest
 import logging

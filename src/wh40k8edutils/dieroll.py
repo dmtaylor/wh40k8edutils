@@ -57,5 +57,5 @@ class DieRoll:
             return False
         
     def __repr__(self):
-        return "<DieRoll isd3:%s orig_value:%d rerolled_value:%d mod_value:%d rerolled:%s"\
+        return "<DieRoll isd3:%s orig_value:%d rerolled_value:%d mod_value:%d rerolled:%s>"\
              % (self.isd3, self.orig_value, self.rerolled_value, self.mod_value, self.rerolled)

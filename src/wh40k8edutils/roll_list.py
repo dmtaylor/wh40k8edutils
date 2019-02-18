@@ -64,7 +64,7 @@ class RollList:
         for item in self.rolls:
             item.apply_mod(self.mod)
             if self.onealwaysfails and item.orig_value == 1:
-                item.mod_value = 1
+                item.mod_value = 0
 
     def count_passes(self) -> int:
         result = 0
@@ -83,3 +83,8 @@ class RollList:
             if not item.has_passed(self.passvalue):
                 result += 1
         return result
+    
+    def __repr__(self):
+        return "<RollList num_rolls:%d rolls:%s reroll_values:%s mod:%d passvalue:%d onealwaysfails:%s>"\
+            % (self.num_rolls, str(self.rolls), str(self.reroll_values),
+               self.mod, self.passvalue, str(self.onealwaysfails))
