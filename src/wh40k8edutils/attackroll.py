@@ -33,3 +33,13 @@ def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
         raise ValueError("Invalid armor", armor)
     if ap < 0:
         raise ValueError("Invalid ap", ap)
+    
+    if isinstance(damage, str):
+        if damage != "d6" and damage != "d3":
+            raise ValueError("Unsupported damage type", damage)
+    elif isinstance(damage, int):
+        if damage <= 0:
+            raise ValueError("Invalid damage", damage)
+    else:
+        raise TypeError("Damage is unsupported type", type(damage))
+    
