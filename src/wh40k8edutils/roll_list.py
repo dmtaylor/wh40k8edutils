@@ -84,6 +84,22 @@ class RollList:
                 result += 1
         return result
     
+    def count_mod_values(self, num: int):
+        result = 0
+        for item in self.rolls:
+            if item.mod_value == num:
+                result += 1
+        
+        return result
+    
+    def count_values(self, num: int):
+        result = 0
+        for item in self.rolls:
+            if item.rerolled_value == num:
+                result += 1
+        
+        return result
+
     def __repr__(self):
         return "<RollList num_rolls:%d rolls:%s reroll_values:%s mod:%d passvalue:%d onealwaysfails:%s>"\
             % (self.num_rolls, str(self.rolls), str(self.reroll_values),

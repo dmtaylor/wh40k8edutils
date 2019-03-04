@@ -3,6 +3,7 @@ Created on Feb 28, 2019
 
 @author: David
 '''
+from wh40k8edutils.roll_list import RollList
 
 
 def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
@@ -43,3 +44,69 @@ def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
     else:
         raise TypeError("Damage is unsupported type", type(damage))
     
+    hits = hit_roll(attacknumber, attackskill, rollmods)
+    wounds = wound_roll(hits, woundon(strength, toughness), rollmods)
+    
+
+def hit_roll(num_attacks: int, attack_skill: int, rollmods: dict):
+    
+    if 'hit_mod' in rollmods:
+        mod = rollmods['hit_mod']
+    else:
+        mod = 0
+        
+    if 'reroll_ones_hit' in rollmods:
+        rerolls = [1]
+    elif 'reroll_misses_hit' in rollmods:
+        rerolls = []
+        for i in range(1, attack_skill):
+            rerolls.append(i)
+    else:
+        rerolls = None
+        
+    attackroll = RollList(num_attacks, attack_skill, reroll_values = rerolls,
+                          mod= mod)
+    
+    passcount = attackroll.count_passes()
+    
+    if 'tesla_rule' in rollmods:
+        for item in attackroll.rolls:
+            if item.mod_value >= 6:
+                passcount += 2
+    
+    return passcount
+
+def wound_roll(num_wounds: int, woundon: int, rollmods: dict):
+    if 'wound_mod' in rollmods:
+        mod = rollmods['wound_mod']
+    else:
+        mod = 0
+        
+    if 'reroll_ones_wound' in rollmods:
+        rerolls = [1]
+    elif 'reroll_misses_wound' in rollmods:
+        rerolls = []
+        for i in range(1,woundon):
+            rerolls.append(i)
+    else:
+        rerolls = []
+        
+    woundrolls = RollList(num_wounds, woundon, reroll_values = rerolls,
+                          mod = mod)
+    
+    return woundrolls.count_passes()
+
+def woundon(strength:int, toughness):
+    if(strength == toughness):
+        return 4
+    elif(strength < toughness and strength > 2*toughness):
+        return 5
+    elif(strength <= 2*toughness):
+        return 6
+    elif(toughness < strength and toughness > 2*strength):
+        return 3
+    elif(toughness <= 2*strength):
+        return 2
+    else:
+        raise ValueError('Arithmetic error with woundson calc', strength,
+                         toughness)
