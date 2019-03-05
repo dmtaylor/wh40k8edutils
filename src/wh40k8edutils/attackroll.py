@@ -49,6 +49,7 @@ def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
     wounds = wound_roll(hits, woundon(strength, toughness), rollmods)
     failed_saves = armor_roll(wounds, armor, ap, rollmods)
     damagearry = damage_roll(failed_saves, damage, rollmods)
+    return (sum(damagearry), damagearry)
     
 
 def hit_roll(num_attacks: int, attack_skill: int, rollmods: dict):
@@ -130,10 +131,17 @@ def damage_roll(failed_saves: int, damage, rollmods: dict):
     
     damage_arry = []
     
-    if damage == 'd6':
-        pass
-    elif damage == 'd3':
-        pass
+    if isinstance(damage, str):
+        damageroll = None
+        if damage == 'd6':
+            damageroll = RollList(failed_saves, 4).rolls #use roll-list here for brevity.
+        else:
+            damageroll = RollList(failed_saves, 3, isd3=True)
+        for item in damageroll:
+            d = item.orig_value
+            if 'min_damage' in rollmods and rollmods['min_damage'] > d:
+                d = rollmods['min_damage']
+            damage_arry.append(d)
     else:
         for _ in range(0, failed_saves):
             damage_arry.append(damage)
