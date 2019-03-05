@@ -4,6 +4,7 @@ Created on Feb 28, 2019
 @author: David
 '''
 from wh40k8edutils.roll_list import RollList
+from sys import api_version
 
 
 def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
@@ -46,6 +47,8 @@ def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
     
     hits = hit_roll(attacknumber, attackskill, rollmods)
     wounds = wound_roll(hits, woundon(strength, toughness), rollmods)
+    failed_saves = armor_roll(wounds, armor, ap, rollmods)
+    damagearry = damage_roll(failed_saves, damage, rollmods)
     
 
 def hit_roll(num_attacks: int, attack_skill: int, rollmods: dict):
@@ -110,3 +113,30 @@ def woundon(strength:int, toughness):
     else:
         raise ValueError('Arithmetic error with woundson calc', strength,
                          toughness)
+
+def armor_roll(num_wounds: int, sv: int, ap: int, rollmods: dict):
+    armor_mod = ap
+    
+    if 'cover_1' in rollmods:
+        armor_mod += 1
+    elif 'cover_2' in rollmods:
+        armor_mod += 2
+        
+    saves = RollList(num_wounds, sv, mod = armor_mod, onealwaysfails = True)
+    
+    return saves.count_failures()
+
+def damage_roll(failed_saves: int, damage, rollmods: dict):
+    
+    damage_arry = []
+    
+    if damage == 'd6':
+        pass
+    elif damage == 'd3':
+        pass
+    else:
+        for _ in range(0, failed_saves):
+            damage_arry.append(damage)
+    
+    return damage_arry
+        

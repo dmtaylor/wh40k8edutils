@@ -99,6 +99,13 @@ class RollList:
                 result += 1
         
         return result
+    
+    def sum_values(self):
+        result = 0
+        for item in self.rolls:
+            result += item.mod_value
+            
+        return result
 
     def __repr__(self):
         return "<RollList num_rolls:%d rolls:%s reroll_values:%s mod:%d passvalue:%d onealwaysfails:%s>"\
