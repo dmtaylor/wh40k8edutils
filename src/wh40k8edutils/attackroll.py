@@ -4,7 +4,6 @@ Created on Feb 28, 2019
 @author: David
 '''
 from wh40k8edutils.roll_list import RollList
-from sys import api_version
 
 
 def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
@@ -49,7 +48,7 @@ def roll(attacknumber: int, attackskill: int, strength: int, toughness: int,
     wounds = wound_roll(hits, woundon(strength, toughness), rollmods)
     failed_saves = armor_roll(wounds, armor, ap, rollmods)
     damagearry = damage_roll(failed_saves, damage, rollmods)
-    return (sum(damagearry), damagearry)
+    return (hits, wounds, failed_saves, sum(damagearry), damagearry)
     
 
 def hit_roll(num_attacks: int, attack_skill: int, rollmods: dict):
@@ -58,6 +57,9 @@ def hit_roll(num_attacks: int, attack_skill: int, rollmods: dict):
         mod = rollmods['hit_mod']
     else:
         mod = 0
+        
+    if 'necron_mwbd' in rollmods:
+        mod += 1
         
     if 'reroll_ones_hit' in rollmods:
         rerolls = [1]
@@ -123,6 +125,8 @@ def armor_roll(num_wounds: int, sv: int, ap: int, rollmods: dict):
     elif 'cover_2' in rollmods:
         armor_mod += 2
         
+    if 'mephrit_bonus' in rollmods:
+        armor_mod -= 1
     saves = RollList(num_wounds, sv, mod = armor_mod, onealwaysfails = True)
     
     return saves.count_failures()
