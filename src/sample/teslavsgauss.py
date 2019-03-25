@@ -5,17 +5,20 @@ armor saves
 @author: David
 '''
 
-import tabulate
+import os
+import csv
+#from tabulate import tabulate
 from wh40k8edutils import attackroll
+from numpy import save
 
 '''
 Global opts on for test
 '''
 tesla_roll_opts = {'tesla_rule': True}
 gauss_roll_opts = {}
-iterations = 1
-rapid_fire_range = True
+iterations = 100
 immortal_count = 10
+immortal_in_rapid = immortal_count
 
 def tesla_roll(target_toughness: int, target_save: int):
     volley = immortal_count * 2
@@ -24,7 +27,7 @@ def tesla_roll(target_toughness: int, target_save: int):
     total_wounds = 0
     total_damage = 0
     for _ in range(0, iterations):
-        vres = attackroll(volley, 3, 5, target_toughness, target_save, 0, 1, 
+        vres = attackroll.roll(volley, 3, 5, target_toughness, target_save, 0, 1, 
                           tesla_roll_opts)
         total_shots += volley
         total_hits += vres[0]
@@ -38,20 +41,18 @@ def tesla_roll(target_toughness: int, target_save: int):
     avg_wounds = round(total_wounds / iterations, 5)
     avg_damage = round(total_damage / iterations, 5)
     
-    return (total_shots, total_hits, total_wounds, total_damage, avg_hits,
+    return ("Tesla", target_toughness, target_save,
+            total_shots, total_hits, total_wounds, total_damage, avg_hits,
             avg_wounds, avg_damage, hit_rate, wound_rate, damage_rate)
 
 def gauss_roll(target_toughness: int, target_save: int):
-    if rapid_fire_range:
-        volley = immortal_count * 2
-    else:
-        volley = immortal_count
+    volley = (immortal_in_rapid * 2) + (immortal_count - immortal_in_rapid)
     total_shots = 0
     total_hits = 0
     total_wounds = 0
     total_damage = 0
     for _ in range(0, iterations):
-        vres = attackroll(volley, 3, 5, target_toughness, target_save, -2, 1, 
+        vres = attackroll.roll(volley, 3, 5, target_toughness, target_save, 2, 1, 
                           gauss_roll_opts)
         total_shots += volley
         total_hits += vres[0]
@@ -65,11 +66,37 @@ def gauss_roll(target_toughness: int, target_save: int):
     avg_wounds = round(total_wounds / iterations, 5)
     avg_damage = round(total_damage / iterations, 5)
     
-    return (total_shots, total_hits, total_wounds, total_damage, avg_hits,
+    return ("Gauss", target_toughness, target_save, total_shots, total_hits, total_wounds,
+            total_damage, avg_hits,
             avg_wounds, avg_damage, hit_rate, wound_rate, damage_rate)
 
 def main():
-    pass
+    header = ("Type", "Toughness", "Sv", "Total shots", "Total Hits",
+              "Total Wounds","Total Damage", 
+              "Average Hits", "Average Wounds", "Average Damage", "Hit Rate",
+              "Wound Rate", "Damage Rate")
+    
+    table = []
+    
+    for toughness in range(4,7):
+        for save in range(2, 7):
+            table.append(tesla_roll(toughness, save))
+            table.append(gauss_roll(toughness, save))
+            print("Rolls for toughness=%d sv=%d" % (toughness, save))
+            
+    if os.path.isfile("teslavsgauss_results.csv"):
+        os.remove("teslavsgauss_results.csv")
+            
+    with open("teslavsgauss_results.csv", 'w') as f:
+        f_csv = csv.writer(f)
+        f_csv.writerow(header)
+        f_csv.writerows(table)
+    '''
+    #resultfile = open("gaussvtesla_results.txt", mode='w', encoding='utf-8')
+    with open("gaussvtesla_results.txt", mode='w', encoding='utf-8') as file:
+        print(str(tabulate(table, headers=header, tablefmt="grid").encode('utf-8')),
+              file=file)
+    '''
 
 if __name__ == '__main__':
     main()

@@ -31,7 +31,7 @@ class RollList:
         '''
         Constructor
         '''
-        if num_rolls <= 0: # can't roll zero dice
+        if num_rolls < 0: # can't roll zero dice
             raise ValueError('Invalid roll number', num_rolls)
         self.num_rolls = num_rolls
         if passvalue <= 1: # No such thing as a natural 1+ roll
