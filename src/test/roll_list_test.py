@@ -26,8 +26,6 @@ class RollListTest(unittest.TestCase):
     def test_invalid_rollnum(self):
         with self.assertRaises(ValueError):
             _ = RollList(-1, 2)
-        with self.assertRaises(ValueError):
-            _ = RollList(0, 2)
             
     def test_invalid_passvalue(self):
         with self.assertRaises(ValueError):
