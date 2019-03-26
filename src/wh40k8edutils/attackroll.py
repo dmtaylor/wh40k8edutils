@@ -102,7 +102,7 @@ def wound_roll(num_wounds: int, woundon: int, rollmods: dict):
     
     return woundrolls.count_passes()
 
-def woundon(strength:int, toughness):
+def woundon(strength:int, toughness: int):
     if(strength == toughness):
         return 4
     elif(strength < toughness and strength > 2*toughness):
@@ -118,7 +118,7 @@ def woundon(strength:int, toughness):
                          toughness)
 
 def armor_roll(num_wounds: int, sv: int, ap: int, rollmods: dict):
-    armor_mod = ap
+    armor_mod = -ap
     
     if 'cover_1' in rollmods:
         armor_mod += 1

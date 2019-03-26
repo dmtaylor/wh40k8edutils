@@ -43,7 +43,10 @@ class DieRoll:
         self.rerolled = False
         
     def reroll(self):
-        self.rerolled_value = random.choice(self.d6_values)
+        if self.isd3:
+            self.rerolled_value = random.choice(self.d3_values)
+        else:
+            self.rerolled_value = random.choice(self.d6_values)
         self.mod_value = self.rerolled_value
         self.rerolled = True
 

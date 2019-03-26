@@ -68,8 +68,6 @@ class RollList:
 
     def count_passes(self) -> int:
         result = 0
-        #self.do_rerolls()
-        #self.apply_mod()
         for item in self.rolls:
             if item.has_passed(self.passvalue):
                 result += 1
@@ -77,8 +75,6 @@ class RollList:
             
     def count_failures(self) -> int:
         result = 0
-        #self.do_rerolls()
-        #self.apply_mod()
         for item in self.rolls:
             if not item.has_passed(self.passvalue):
                 result += 1

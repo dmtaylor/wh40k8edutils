@@ -6,6 +6,7 @@ armor saves
 '''
 
 import os
+import platform
 import csv
 #from tabulate import tabulate
 from wh40k8edutils import attackroll
@@ -15,8 +16,9 @@ from numpy import save
 Global opts on for test
 '''
 tesla_roll_opts = {'tesla_rule': True}
+tesla_mwbd_roll_opts = {'tesla_rule': True, 'necron_mwbd': True}
 gauss_roll_opts = {}
-iterations = 100
+iterations = 10000
 immortal_count = 10
 immortal_in_rapid = immortal_count
 
@@ -33,6 +35,7 @@ def tesla_roll(target_toughness: int, target_save: int):
         total_hits += vres[0]
         total_wounds += vres[1]
         total_damage += vres[3]
+        
         
     hit_rate = round(total_hits / total_shots, 5)
     wound_rate = round(total_wounds / total_shots, 5)
@@ -86,17 +89,18 @@ def main():
             
     if os.path.isfile("teslavsgauss_results.csv"):
         os.remove("teslavsgauss_results.csv")
+        
+    # windows newline fix
+    if platform.system() == 'Windows':
+        f = open("teslavsgauss_results.csv", 'w', newline='')
+    else:
+        f = open("teslavsgauss_results.csv", 'w')
             
-    with open("teslavsgauss_results.csv", 'w') as f:
-        f_csv = csv.writer(f)
-        f_csv.writerow(header)
-        f_csv.writerows(table)
-    '''
-    #resultfile = open("gaussvtesla_results.txt", mode='w', encoding='utf-8')
-    with open("gaussvtesla_results.txt", mode='w', encoding='utf-8') as file:
-        print(str(tabulate(table, headers=header, tablefmt="grid").encode('utf-8')),
-              file=file)
-    '''
+    f_csv = csv.writer(f)
+    f_csv.writerow(header)
+    f_csv.writerows(table)
+    
+    f.close()
 
 if __name__ == '__main__':
     main()
